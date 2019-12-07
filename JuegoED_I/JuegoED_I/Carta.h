@@ -17,6 +17,7 @@ public:
 	string getNombre();
 	void setNombre(string);
 	bool isEqual(Carta);
+	bool mismoPalo(Carta);
 };
 
 #endif 

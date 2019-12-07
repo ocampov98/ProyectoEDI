@@ -1,6 +1,7 @@
 #include "Controller.h"
 #include "Lista.h"
 #include "Carta.h"
+#include "Pila.h"
 #include<sstream>;
 #include <iostream>
 using namespace std;
@@ -10,6 +11,66 @@ using namespace std;
 
 Controller::Controller() {
 	baraja = Lista();
+	barajaMezclada = Cola();
+	maso = Pila();
+	turno = 2;
+	contadorPalo = 0;
+	cartaActual = Carta();
+	j1 = Jugador();
+	j2 = Jugador();
+}
+
+int Controller::getTurno() {
+	return turno;
+}
+
+int Controller::getContadorPalo() {
+	return contadorPalo;
+}
+
+Carta Controller::getCartaActual() {
+	return cartaActual;
+}
+
+bool Controller::gameOver() {
+	switch (turno)
+	{
+	case 1:
+		if (j1.mostrarMano() == "Lista vacia") {
+			turno++;
+			return true;
+		}
+		turno++;
+		break;
+	case 2:
+		if (j2.mostrarMano() == "Lista vacia") {
+			turno--;
+			return true;
+		}
+		turno--;
+		break;
+	default:
+		break;
+	}
+	return false;
+}
+
+void Controller::sigTurno() {
+	switch (turno)
+	{
+	case 1:
+		turno++;
+		break;
+	case 2:
+		turno--;
+		break;
+	default:
+		break;
+	}
+}
+
+void Controller::resetCartaActual() {
+	cartaActual = Carta();
 }
 
 void Controller::llenarBaraja() {
@@ -104,12 +165,82 @@ void Controller::repartirBaraja() {
 		}
 		mCarta = barajaMezclada.pop();
 	}
+}
 
-	cout << "-----Jugador 1-----" << endl;
-	j1.mostrarMano();
-	cout << "\n-----Jugador 2-----" << endl;
-	j2.mostrarMano();
+bool Controller::jugarTurno(string palo, string nombre) {
+	contadorPalo = 0;
+	Carta mCarta;
+	switch (turno)
+	{
+	case 1:
+		mCarta = j1.sacarCarta(palo, nombre);
+		break;
+	case 2:
+		mCarta = j2.sacarCarta(palo, nombre);
+		break;
+	default:
+		break;
+	}
 
+	if (mCarta.getNombre() != "") {
+		if (cartaActual.getNombre() == "") {
+			maso.push(mCarta);
+			cartaActual = mCarta;
+			contadorPalo++;
+			return true;
+		}
+		else {
+			if (mCarta.mismoPalo(cartaActual)) {
+				maso.push(mCarta);
+				cartaActual = mCarta;
+				contadorPalo++;
+				return true;
+			}
+			else {
+				return false;
+			}
+		}
+	}
+	else {
+		return false;
+	}
+}
+
+string Controller::mostrarMasoTurno() {
+	switch (turno)
+	{
+	case 1:
+		return j1.mostrarMano();
+	case 2:
+		return j2.mostrarMano();
+	default:
+		return "";
+		break;
+	}
+}
+
+Carta Controller::getNextCarta(string pPalo) {
+	Carta mCarta;
+	switch (turno)
+	{
+	case 1:
+		mCarta = j1.getNextCarta(pPalo);
+		if (mCarta.getNombre() != "") {
+			contadorPalo++;
+		}
+		return mCarta;
+		break;
+	case 2:
+		mCarta = j2.getNextCarta(pPalo);
+		if (mCarta.getNombre() != "") {
+			contadorPalo++;
+		}
+		return mCarta;
+		break;
+	default:
+		return Carta();
+		break;
+	}
 }
 
 #endif 

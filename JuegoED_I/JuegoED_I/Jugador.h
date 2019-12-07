@@ -3,6 +3,7 @@
 
 #include <string>
 #include "Lista.h"
+#include "Carta.h"
 using namespace std;
 
 class Jugador
@@ -20,7 +21,9 @@ public:
 	void setPuntaje(int);
 	void sumarPuntaje();
 	void addCarta(Carta);
-	void mostrarMano();
+	string mostrarMano();
+	Carta sacarCarta(string, string);
+	Carta getNextCarta(string);
 };
 
 #endif 

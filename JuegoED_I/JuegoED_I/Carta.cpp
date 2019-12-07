@@ -37,3 +37,13 @@ bool Carta::isEqual(Carta pCarta) {
 		return false;
 	}
 }
+
+bool Carta::mismoPalo(Carta pCarta) {
+	if (pCarta.getPalo() == palo) {
+		return true;
+	}
+	else
+	{
+		return false;
+	}
+}

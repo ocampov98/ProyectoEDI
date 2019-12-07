@@ -38,6 +38,14 @@ void Jugador::addCarta(Carta pCarta) {
 	mano.add(pCarta);
 }
 
-void Jugador::mostrarMano() {
-	mano.mostrarLista();
+string Jugador::mostrarMano() {
+	return mano.mostrarLista();
+}
+
+Carta Jugador::sacarCarta(string palo, string nombre) {
+	return mano.pop(palo, nombre);
+}
+
+Carta Jugador::getNextCarta(string pPalo) {
+	return mano.popNextPalo(pPalo);
 }

@@ -67,7 +67,7 @@ void Lista::ordenar() {
 Carta Lista::pop(string palo, string nombre) {
 
 	if (cabeza == NULL) {
-		cout << "lista vacia";
+		return Carta();
 	}
 	else {
 		Carta data = Carta(palo,nombre);
@@ -75,28 +75,25 @@ Carta Lista::pop(string palo, string nombre) {
 		NodoCarta* act;
 		ant = cabeza;
 		act = cabeza->getPtr();
-		bool ciclo = true;
 		if (data.isEqual(cabeza->getData())) {
 			data = cabeza->getData();
 			cabeza = cabeza->getPtr();
-			delete act;
 			return data;
 		}
 		else {
-			while (ciclo != false && act != NULL) {
+			while (act != NULL) {
 				if (data.isEqual(act->getData())) {
 					data = act->getData();
 					ant->setPtr(act->getPtr());
-					delete act;
-					ciclo = false;
 					return data;
 				}
 				else
 				{
 					ant = act;
-					act = ant->getPtr();
+					act = act->getPtr();
 				}
 			}
+			return Carta();
 		}
 	}
 }
@@ -114,73 +111,53 @@ Carta Lista::popFirst() {
 	}
 }
 
-void Lista::mostrarLista() {
-	NodoCarta* aux;
-	aux = cabeza;
-
-	if (aux == NULL) {
-		cout << "Lista vacia";
+Carta Lista::popNextPalo(string pPalo) {
+	if (cabeza == NULL) {
+		return Carta();
 	}
 	else {
-		while (aux != NULL)
-		{
-			cout << aux->getData().getNombre() << " de " << aux->getData().getPalo() << endl;
-			aux = aux->getPtr();
+		Carta data = Carta(pPalo, "");
+		NodoCarta* ant;
+		NodoCarta* act;
+		ant = cabeza;
+		act = cabeza->getPtr();
+		if (data.mismoPalo(cabeza->getData())) {
+			data = cabeza->getData();
+			cabeza = cabeza->getPtr();
+			return data;
 		}
-	}
-}
-
-
-/*
-void Lista::mezclar() {
-
-	NodoCarta* aux;
-	aux = cabeza;
-
-	if (aux == NULL) {
-		cout << "Lista vacia";
-	}
-	else {
-		int r;
-		Pila auxStack1 = Pila();
-		Pila auxStack2 = Pila();
-
-		while (aux != NULL)
-		{
-			string palo = aux->getData().getPalo();
-			string nombre = aux->getData().getNombre();
-
-			srand((int)time(0));
-			r = (rand() % 2) + 1;
-			switch (r)
-			{
-			case 1:
-				auxStack1.push(pop(palo, nombre));
-				break;
-			case 2:
-				auxStack2.push(pop(palo, nombre));
-				break;
-			default:
-				break;
+		else {
+			while (act != NULL) {
+				if (data.mismoPalo(act->getData())) {
+					data = act->getData();
+					ant->setPtr(act->getPtr());
+					return data;
+				}
+				else
+				{
+					ant = act;
+					act = act->getPtr();
+				}
 			}
-
-			aux = aux->getPtr();
-		}
-
-		Carta auxCard;
-		auxCard = auxStack1.pop();
-		while (auxCard.getNombre() != "") {
-			add(auxCard);
-			auxCard = auxStack1.pop();
-		}
-
-		auxCard = auxStack2.pop();
-		while (auxCard.getNombre() != "") {
-			add(auxCard);
-			auxCard = auxStack2.pop();
+			return Carta();
 		}
 	}
-
 }
 
-*/
+string Lista::mostrarLista() {
+	NodoCarta* aux;
+	aux = cabeza;
+
+	if (aux == NULL) {
+		return "Lista vacia";
+	}
+	else {
+		string text;
+		while (aux != NULL)
+		{
+			text += aux->getData().getNombre() + " de " + aux->getData().getPalo() + "\n";
+			aux = aux->getPtr();
+		}
+		return text;
+	}
+}

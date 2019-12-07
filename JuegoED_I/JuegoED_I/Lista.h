@@ -11,7 +11,8 @@ public:
 	void ordenar();
 	Carta pop(string, string);
 	Carta popFirst();
-	void mostrarLista();
+	Carta popNextPalo(string);
+	string mostrarLista();
 
 private:
 	NodoCarta* cabeza;
